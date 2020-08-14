@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <link rel="stylesheet" href="edit.css" type="text/css">
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Playfair+Display" />
+        
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>
+
+                    
+
+                <!-- The core Firebase JS SDK is always required and must be listed first -->
+         <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-app.js"></script>
+         
+
+                    <!-- TODO: Add SDKs for Firebase products that you want to use
+                        https://firebase.google.com/docs/web/setup#available-libraries -->
+                        <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+                        <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-firestore.js"></script>
+
+                    <script>
+                    // Your web app's Firebase configuration
+                    $(document).ready(function() {
+                        
+                 
+                    var firebaseConfig = {
+                        apiKey: "AIzaSyC_mRVzq-KoM_jilC-Yss0xTnCSPOgIJqg",
+                        authDomain: "web-resume-f7f8f.firebaseapp.com",
+                        databaseURL: "https://web-resume-f7f8f.firebaseio.com",
+                        projectId: "web-resume-f7f8f",
+                        storageBucket: "web-resume-f7f8f.appspot.com",
+                        messagingSenderId: "765072009550",
+                        appId: "1:765072009550:web:1356b8ac757a44f0b0561f"
+                    };
+                    // Initialize Firebase
+                    var defaultProject = firebase.initializeApp(firebaseConfig);
+                    var defaultFirestore = defaultProject.firestore();
+
+                    $("#main-content").hide();
+                    $("div.add-form").hide();
+                    $("div.edit-form").hide();
+                  ;
+            
+                
+                    $("form#login").submit(function(e){
+                            e.preventDefault();
+                    
+                            var email = $("input#email").val();
+                            var password = $("input#password").val();
+                            
+                            firebase.auth().signInWithEmailAndPassword(email, password).then(function(result){
+                                console.log("signed in");
+                                console.log(result);
+                            
+                                $("#main-content").show();
+                               
+                                displayContent();
+                                $("div.login-container").hide();
+                             
+                            }).catch(function(error) {
+                            // Handle Errors here.
+                            var errorCode = error.code;
+                            var errorMessage = error.message;
+                            console.log(errorCode + ": "+ errorMessage);
+                            });
+                        
+                        });
+
+
+            $("div#educ-text div.add-button").click(function(){
+                $("#educform").show();
+            });
+
+            $(document).on("click", "form#addeduc #cancel-button", function(){
+                clearFormEduc();
+                $("#educform").hide();
+
+
+            })
+                        
+            $("form#addeduc").submit(function(e){
+                e.preventDefault();
+                
+                
+                var educationLevel = $("input#educ-level").val()
+                var degree = $("input#educ-degree").val()
+                var school = $("input#educ-school").val()
+                var yearStarted = parseInt($("input#educ-yearStart").val())
+                var yearEnded = parseInt($("input#educ-yearEnd").val())
+                
+                addEducation(educationLevel,degree,school,yearStarted,yearEnded);
+                
+               
+                });
+
+
+                function addEducation(educationLevel,degree,school,yearStarted,yearEnded){
+                return firebase.firestore().collection('education').add({
+                    educationLevel: educationLevel,
+                    degree: degree,
+                    school: school,
+                    yearStarted: yearStarted,
+                    yearEnded: yearEnded
+                }).then(function(result){
+                    console.log(result);
+                    
+                    $("#educform").hide();
+                    
+                    clearFormEduc();
+                    displayContent();
+                    
+                }).catch(function(error) {
+                    console.error('Error writing new message to database', error);
+                });
+                }
+
+
+            
+            function clearFormEduc(){
+                $("form input#educ-level").val("");
+                $("form input#educ-degree").val("");
+                $("form input#educ-school").val("");
+                $("form input#educ-yearStart").val("");
+                $("form input#educ-yearEnd").val("");
+            }
+
+                // add educ end
+
+            // add org start
+
+             $("div#org-text div.add-button").click(function(){
+                $("#orgform").show();
+            });
+
+            $(document).on("click", "form#addorg #cancel-button", function(){
+                clearFormOrg();
+                $("#orgform").hide();
+
+
+            })
+                        
+            $("form#addorg").submit(function(e){
+                e.preventDefault();
+                
+                
+                var nameOrganization = $("input#org-name").val()
+                var positionHeld = $("input#org-pos").val()
+                var yearStarted = parseInt($("input#org-yearStart").val())
+                if($("input#org-yearEnd").val()==""){
+                    var yearEnded =   null;
+                }
+                else{
+                var yearEnded = parseInt($("input#org-yearEnd").val())
+                  }
+                addOrg(nameOrganization, positionHeld, yearStarted,yearEnded);
+                
+               
+                });
+
+
+                function addOrg(nameOrganization, positionHeld, yearStarted,yearEnded){
+                return firebase.firestore().collection('organizations').add({
+                    nameOrganization: nameOrganization, 
+                    positionHeld: positionHeld, 
+                    yearStarted: yearStarted,
+                    yearEnded:yearEnded
+                }).then(function(result){
+                    console.log(result);
+                    
+                    $("#orgform").hide();
+                    
+                    clearFormOrg();
+                    
+                    displayContent();
+                    
+                }).catch(function(error) {
+                    console.error('Error writing new message to database', error);
+                });
+                }
+
+                function clearFormOrg(){
+                $("form input#org-name").val("");
+                $("form input#org-pos").val("");
+                $("form input#org-yearStart").val("");
+                $("form input#org-yearEnd").val("");
+            }
+
+
+            // add org end
+
+
+            // add work start
+
+            $("div#work-text div.add-button").click(function(){
+                $("#workform").show();
+                
+            });
+
+            $(document).on("click", "form#addwork #cancel-button", function(){
+                clearFormWork();
+                $("#workform").hide();
+
+
+            })
+                        
+            $("form#addwork").submit(function(e){
+                e.preventDefault();
+                
+                
+                var name = $("input#work-name").val()
+                var desc = $("input#work-desc").val()
+                var year= parseInt($("input#work-year").val())
+               
+                addWork(name, desc,year);
+                
+               
+                });
+
+
+                function addWork(name, desc, year){
+                return firebase.firestore().collection('work').add({
+                  name: name,
+                  desc: desc,
+                  year: year
+                }).then(function(result){
+                    console.log(result);
+                    
+                    $("#workform").hide();
+                    
+                    clearFormWork();
+                    
+                    displayContent();
+                    
+                }).catch(function(error) {
+                    console.error('Error writing new message to database', error);
+                });
+                }
+
+                function clearFormWork(){
+                $("form input#work-name").val("");
+                $("form input#work-desc").val("");
+                $("form input#work-year").val("");
+                
+            }
+
+
+            // add work end
+            
+            
+            // add res start
+
+            $("div#research-text div.add-button").click(function(){
+                $("#researchform").show();
+            });
+                        
+            $(document).on("click", "form#addresearch #cancel-button", function(){
+                clearFormResearch();
+                $("#researchform").hide();
+
+
+            })
+            $("form#addresearch").submit(function(e){
+                e.preventDefault();
+                
+                
+                var title = $("input#res-title").val()
+                var authors = $("input#res-authors").val()
+                var year= parseInt($("input#res-year").val())
+               
+                addResearch(title, authors,year);
+                
+               
+                });
+
+
+            function addResearch(title, authors, year){
+                return firebase.firestore().collection('research').add({
+                  title: title,
+                  authors: authors,
+                  year: year
+                }).then(function(result){
+                    console.log(result);
+                    
+                    $("#researchform").hide();
+                    
+                    clearFormResearch();
+                    
+                    displayContent();
+                    
+                }).catch(function(error) {
+                    console.error('Error writing new message to database', error);
+                });
+                }
+
+             function clearFormResearch(){
+                $("form input#res-title").val("");
+                $("form input#res-authors").val("");
+                $("form input#res-year").val("");
+                
+            }
+
+
+            // add Research end
+
+
+            //edit intro start
+            $(document).on("click" , "section#r_intro div.edit-button", function(){
+                console.log("hello");
+                $("div#edit-greeting").show();
+                firebase.firestore().collection("others").doc("intro").get().then(function(doc) {
+                     if (doc.exists) {
+
+                        $("form input#text-top").val(doc.data().value_top);
+                        $("form input#text-bottom").val(doc.data().value_bottom);
+                        console.log(doc.data().value_top)
+
+                     }
+                })
+            });
+
+            $(document).on("click", "form#editgreet #cancel-button", function(){
+                clearFormGreet();
+                $("#edit-greeting").hide();
+
+
+            })
+
+            $("form#editgreet").submit(function(e){
+                e.preventDefault();
+                
+                
+                var value_top = $("input#text-top").val()
+                var value_bottom = $("input#text-bottom").val()
+                
+               
+               editIntro(value_top, value_bottom);
+                
+               
+                });
+
+
+            function editIntro(value_top, value_bottom){
+                return firebase.firestore().collection('others').doc('intro').update({
+                    value_top: value_top,
+                    value_bottom: value_bottom
+                }).then(function(result){
+                    console.log(result);
+                    
+                    $("div#edit-greeting").hide();
+                    
+                    clearFormGreet();
+                    
+                    displayContent();
+                    
+                }).catch(function(error) {
+                    console.error('Error editing message to database', error);
+                });
+                }
+
+                function clearFormGreet(){
+                    $("input#text-top").val("")
+                    $("input#text-bottom").val("")
+                }
+
+            //edit intro end
+
+
+        //edit about start
+            $("section#r_about div.edit-button").click(function(){
+                console.log("hello");
+                $("div#edit-about").show();
+                firebase.firestore().collection("others").doc("aboutme").get().then(function(doc) {
+                     if (doc.exists) {
+
+                        $("form textarea#about-desc").val(doc.data().value);
+                        $
+
+                     }
+                })
+            });
+
+            
+            $(document).on("click", "form#editabout #cancel-button", function(){
+                clearFormAbout();
+                $("#edit-about").hide();
+
+
+            })
+
+            $("form#editabout").submit(function(e){
+                e.preventDefault();
+                
+                
+                var value = $("textarea#about-desc").val()
+           
+                
+               
+               editAbout(value);
+                
+               
+                });
+
+
+            function editAbout(value){
+                return firebase.firestore().collection('others').doc('aboutme').update({
+                    value:value
+                }).then(function(result){
+                    console.log(result);
+                    
+                    $("div#edit-about").hide();
+                    
+                    clearFormAbout();
+                    
+                    displayContent();
+                    
+                }).catch(function(error) {
+                    console.error('Error editing message to database', error);
+                });
+                }
+
+                function clearFormAbout(){
+                    $("textarea#about-desc").val("")
+                 
+                }
+
+            //edit about end
+
+
+                
+        //edit contact start
+            $("section#r_contact div.edit-button").click(function(){
+                console.log("hello");
+                $("div#edit-links").show();
+                firebase.firestore().collection("others").doc("links").get().then(function(doc) {
+                     if (doc.exists) {
+
+                        $("form input#twitter-link").val(doc.data().twitter);
+                        $("form input#github-link").val(doc.data().github);
+                        $("form input#linkedin-link").val(doc.data().linkedin);
+                        $("form input#twitter-handle").val(doc.data().twhandle);
+                        $("form input#github-profile").val(doc.data().githubprof);
+                        $("form input#linkedin-name").val(doc.data().linkedinname);
+
+                     }
+                })
+            });
+
+            
+            $(document).on("click", "form#editlinks #cancel-button", function(){
+                clearFormLinks();
+                $("#edit-links").hide();
+
+
+            })
+
+            $("form#editlinks").submit(function(e){
+                e.preventDefault();
+                
+                
+                var twitter = $("form input#twitter-link").val();
+                var github = $("form input#github-link").val();
+                var linkedin =   $("form input#linkedin-link").val();
+                var twhandle =   $("form input#twitter-handle").val();
+                var githubprof =  $("form input#github-profile").val();
+                var linkedinname =  $("form input#linkedin-name").val();
+           
+                
+               
+               editLinks(twitter,github,linkedin,twhandle,githubprof,linkedinname);
+                
+               
+                });
+
+
+            function  editLinks(twitter,github,linkedin,twhandle,githubprof,linkedinname){
+                return firebase.firestore().collection('others').doc('links').update({
+                    twitter:twitter,
+                    github:github,
+                    linkedin:linkedin,
+                    twhandle:twhandle,
+                    githubprof:githubprof,
+                    linkedinname:linkedinname
+                }).then(function(result){
+                    console.log(result);
+                    
+                    $("div#edit-links").hide();
+                    
+                    clearFormLinks();
+                    
+                    displayContent();
+                    
+                }).catch(function(error) {
+                    console.error('Error editing message to database', error);
+                });
+                }
+
+                function clearFormLinks(){
+                    $("form input#twitter-link").val("");
+                        $("form input#github-link").val("");
+                        $("form input#linkedin-link").val("");
+                        $("form input#twitter-handle").val("");
+                        $("form input#github-profile").val("");
+                        $("form input#linkedin-name").val("");
+                 
+                }
+
+            //edit links end
+
+
+
+
+
+
+
+
+
+
+
+            //deleting stuff
+
+                    $(document).on("click", "div#educ-text div.delete", function(){
+                            console.log("deleted");
+                            console.log($(this).attr("data-uid"));
+                            
+                            deleteEducation($(this).attr("data-uid"));
+                            
+                        });
+                        
+
+                    function deleteEducation(uid){
+                        firebase.firestore().collection("education").doc(uid).delete().then(function(){
+                            
+                        displayContent();
+                        }).catch(function(error) {
+                            console.error("Error removing document: ", error);
+                        });
+
+                        }
+
+     
+
+                    $(document).on("click", "div#work-text div.delete", function(){
+                            console.log("deleted");
+                            console.log($(this).attr("data-uid"));
+                            
+                            deleteWork($(this).attr("data-uid"));
+                            
+                        });
+
+                    function deleteWork(uid){
+                        firebase.firestore().collection("work").doc(uid).delete().then(function(){
+                            
+                        displayContent();
+                        }).catch(function(error) {
+                            console.error("Error removing document: ", error);
+                        });
+
+                        }
+
+
+                    $(document).on("click", "div#org-text div.delete", function(){
+                            console.log("deleted");
+                            console.log($(this).attr("data-uid"));
+                            
+                            deleteOrg($(this).attr("data-uid"));
+                            
+                        });
+
+                    function deleteOrg(uid){
+                        firebase.firestore().collection("organizations").doc(uid).delete().then(function(){
+                            
+                        displayContent();
+                        }).catch(function(error) {
+                            console.error("Error removing document: ", error);
+                        });
+
+                        }
+
+                    $(document).on("click", "div#research-text div.delete", function(){
+                            console.log("deleted");
+                            console.log($(this).attr("data-uid"));
+                            
+                            deleteResearch($(this).attr("data-uid"));
+                            
+                        });
+
+                    function deleteResearch(uid){
+                        firebase.firestore().collection("research").doc(uid).delete().then(function(){
+                            
+                        displayContent();
+                        }).catch(function(error) {
+                            console.error("Error removing document: ", error);
+                        });
+
+                        }
+                        
+
+
+
+
+
+                function displayContent(){
+                     var db = firebase.firestore()
+                     $("div#educ-text>article").css("display", "none");
+                     $("div#org-text>article").css("display", "none");
+                     $("div#work-text>article").css("display", "none");
+                     $("div#research-text>article").css("display", "none");
+                     $("div#about-text>article").css("display", "none");
+                     $("div.text-container-greeting>div").css("display", "none");
+                     $("div#contact-text>a").css("display", "none");
+                        //  EDUCATION START
+                                db.collection('education').orderBy("yearStarted","desc").onSnapshot(function(snapshot) {
+                                    
+                                        snapshot.docChanges().forEach(function(change) {
+                                    if (change.type === 'removed') {
+                                        //                    deleteMessage(change.doc.id);
+                                        console.log(change.doc.id)
+                                    } else {
+                                            var data = change.doc.data();
+
+                                            var textContainer = document.createElement("article");
+                                            var educlevel = document.createElement("div");
+                                            var educschool = document.createElement("div");
+                                            var educdegree = document.createElement("div");
+                                            var educyear = document.createElement("div");
+                                            var deletecontainer = document.createElement("div");
+                                            var deletebutton = document.createElement("div");
+
+                                            $(educlevel).text(data.educationLevel);
+                                            $(educschool).text(data.school);
+                                            if(data.degree==null){
+                                                $(educdegree).text(" ");
+                                            }
+                                            else {
+                                                $(educdegree).text(data.degree + " | ");
+                                            }
+                                            $(educyear).text(data.yearStarted + "-" + data.yearEnded);
+                                            $(deletebutton).text("delete");
+                                        
+                                            $(educlevel).addClass("educ-level");
+                                            $(educschool).addClass("educ-school");
+                                            $(educdegree).addClass("educ-degree");
+                                            $(educyear).addClass("educ-year");
+                                            $(deletebutton).addClass("delete");
+                                            $(deletecontainer).addClass("delete-container");
+                                            $(deletebutton).attr("data-uid",change.doc.id);
+
+                                            $(textContainer).append(educlevel);
+                                            $(textContainer).append(educschool);
+                                            $(textContainer).append(educdegree);
+                                            $(textContainer).append(educyear);
+                                            $(deletecontainer).append(deletebutton);
+                                            $(textContainer).append(deletecontainer);
+
+                                            $("div#educ-text").append(textContainer);
+                                    
+                                            }
+                                        });
+                                    });
+
+                        // EDUCATION END
+
+                        // ORG START
+                                db.collection('organizations').orderBy("yearStarted","desc").onSnapshot(function(snapshot) {
+                                        snapshot.docChanges().forEach(function(change) {
+                                    if (change.type === 'removed') {
+                                        //                    deleteMessage(change.doc.id);
+                                        console.log(change.doc.id)
+                                    } else {
+                                            var data = change.doc.data();
+
+                                            var textContainer = document.createElement("article");
+                                            var orgname = document.createElement("div");
+                                            var orgpos = document.createElement("div");
+                                            var orgyear = document.createElement("div");
+
+                                            var deletecontainer = document.createElement("div");
+                                            var deletebutton = document.createElement("div");
+                                            $(deletebutton).text("delete");
+                                            $(deletebutton).addClass("delete");
+                                            $(deletecontainer).addClass("delete-container");
+                                            $(deletebutton).attr("data-uid",change.doc.id);
+
+                                            $(orgname).text(data.nameOrganization);
+                                            $(orgpos).text(data.positionHeld + " | ");
+                                            var yearEnd = data.yearEnded;
+                                            if(data.yearEnded == null)
+                                            {
+                                                yearEnd = "Present";
+                                            }
+
+                                            $(orgyear).text(data.yearStarted + "-" + yearEnd);                          
+                                            $(orgname).addClass("org-name");
+                                            $(orgpos).addClass("org-pos");
+                                            $(orgyear).addClass("org-year");
+
+                                            $(textContainer).append(orgname);
+                                            $(textContainer).append(orgpos);
+                                            $(textContainer).append(orgyear);
+                                            $(deletecontainer).append(deletebutton);
+                                            $(textContainer).append(deletecontainer);
+
+                                            $("div#org-text").append(textContainer);
+                                    
+                                            }
+                                        });
+                                    });
+
+                        // ORG END
+
+                        // RESEARCH START
+                        db.collection('research').orderBy("year","desc").onSnapshot(function(snapshot) {
+                                        snapshot.docChanges().forEach(function(change) {
+                                    if (change.type === 'removed') {
+                                        //                    deleteMessage(change.doc.id);
+                                        console.log(change.doc.id)
+                                    } else {
+                                            var data = change.doc.data();
+
+                                            var textContainer = document.createElement("article");
+                                            var restitle = document.createElement("div");
+                                            var resauthor = document.createElement("div");
+                                            var resyear = document.createElement("div");
+
+
+                                            var deletecontainer = document.createElement("div");
+                                            var deletebutton = document.createElement("div");
+                                            $(deletebutton).text("delete");
+                                            $(deletebutton).addClass("delete");
+                                            $(deletecontainer).addClass("delete-container");
+                                            $(deletebutton).attr("data-uid",change.doc.id);
+
+                                            $(restitle).text(data.title);
+                                            $(resauthor).text(data.authors + " | ");
+                                            $(resyear).text(data.year);                          
+                                            $(restitle).addClass("res-title");
+                                            $(resauthor).addClass("res-author");
+                                            $(resyear).addClass("res-year");
+
+                                            $(textContainer).append(restitle);
+                                            $(textContainer).append(resauthor);
+                                            $(textContainer).append(resyear);
+
+                                            $(deletecontainer).append(deletebutton);
+                                            $(textContainer).append(deletecontainer);
+
+                                            $("div#research-text").append(textContainer);
+                                    
+                                            }
+                                        });
+                                    });
+
+                        // RESEARCH END
+
+                        // WORK START
+                            
+                        db.collection('work').orderBy("year" ,"desc").onSnapshot(function(snapshot) {
+                                        snapshot.docChanges().forEach(function(change) {
+                                    if (change.type === 'removed') {
+                                        //                    deleteMessage(change.doc.id);
+                                        console.log(change.doc.id)
+                                    } else {
+                                            var data = change.doc.data();
+
+                                            var textContainer = document.createElement("article");
+                                            var worktitle = document.createElement("div");
+                                            var workdesc = document.createElement("div");
+                                            var workyear = document.createElement("div");
+
+                                            
+                                            var deletecontainer = document.createElement("div");
+                                            var deletebutton = document.createElement("div");
+                                            $(deletebutton).text("delete");
+                                            $(deletebutton).addClass("delete");
+                                            $(deletecontainer).addClass("delete-container");
+                                            $(deletebutton).attr("data-uid",change.doc.id);
+
+                                            $(worktitle).text(data.name + " | ");
+                                            $(workyear).text(data.year);
+                                            $(workdesc).text(data.desc);                          
+                                            $(worktitle).addClass("work-title");
+                                            $(workdesc).addClass("work-desc");
+                                            $(workyear).addClass("work-year");
+
+                                            $(textContainer).append(worktitle);
+                                            $(textContainer).append(workyear);
+                                            $(textContainer).append(workdesc);
+                                            $(deletecontainer).append(deletebutton);
+                                            $(textContainer).append(deletecontainer);
+
+                                            $("div#work-text").append(textContainer);
+                                    
+                                            }
+                                        });
+                                    });
+
+
+                                    // WORK END
+
+                                    
+
+                                    db.collection("others").doc("aboutme").get().then(function(doc) {
+                                        if (doc.exists) {
+                                            var textContainer = document.createElement("article");
+                                            var aboutdesc = document.createElement("div");
+                                            
+                                            $(aboutdesc).text(doc.data().value);
+                                            $(aboutdesc).addClass("about-desc");
+                                            $(textContainer).append(aboutdesc);
+                                            $("div#about-text").append(textContainer);
+                                            
+                                        } else {
+                                            // doc.data() will be undefined in this case
+                                            console.log("No such document!");
+                                        }
+                                    }).catch(function(error) {
+                                        console.log("Error getting document:", error);
+                                    });
+
+
+                                    // aboutme end
+                                    
+                                    db.collection("others").doc("intro").get().then(function(doc) {
+                                        if (doc.exists) {
+                                            
+                                            var texttop = document.createElement("div");
+                                            var linedivider = document.createElement("div");
+                                            var textbottom = document.createElement("div");
+                                            var editbutton = document.createElement("div");
+                                            
+                                            $(texttop).text(doc.data().value_top);
+                                            $(textbottom).text(doc.data().value_bottom);
+                                            $(editbutton).text("edit");
+                                            
+
+                                            $(texttop).addClass("text-top");
+                                            $(textbottom).addClass("text-bottom");
+                                            $(linedivider).addClass("linedivider");
+                                            $(editbutton).addClass("edit-button");
+
+                                            $("div.text-container-greeting").append(texttop);
+                                            $("div.text-container-greeting").append(linedivider);
+                                            $("div.text-container-greeting").append(textbottom);
+                                            $("div.text-container-greeting").append(editbutton);
+                                            
+                                    
+                                            
+                                        } else {
+                                            // doc.data() will be undefined in this case
+                                            console.log("No such document!");
+                                        }
+                                    }).catch(function(error) {
+                                        console.log("Error getting document:", error);
+                                    });
+
+
+
+                                    // intro end
+                                    
+                                    db.collection("others").doc("links").get().then(function(doc) {
+                                        if (doc.exists) {
+                                            
+                                            var twitter = document.createElement("a");
+                                            var linkedin = document.createElement("a");
+                                            var github = document.createElement("a");
+                                            
+                                            $(twitter).attr("href", doc.data().twitter);
+                                            $(linkedin).attr("href", doc.data().linkedin);
+                                            $(github).attr("href", doc.data().github);
+
+                                            $(twitter).text("Twitter | "+doc.data().twhandle);
+                                            $(linkedin).text("LinkedIn | "+doc.data().linkedinname);
+                                            $(github).text("Github | "+doc.data().githubprof);
+
+                                            $(twitter).addClass("c-twitter");
+                                            $(linkedin).addClass("c-linkedin");
+                                            $(github).addClass("c-github");
+
+                                            $("div#contact-text").append(twitter);
+                                            $("div#contact-text").append(linkedin);
+                                            $("div#contact-text").append(github);
+
+                                            
+                                            
+                                        } else {
+                                            // doc.data() will be undefined in this case
+                                            console.log("No such document!");
+                                        }
+                                    }).catch(function(error) {
+                                        console.log("Error getting document:", error);
+                                    });
+
+                                }   
+                                
+                    });
+                    </script>
+    </head>
+    <body>
+    <div id="main-content">
+        <a id="home"></a>
+        <section id="r_intro" class="r_intro">
+            <nav>
+                <a id="logolink" href="#home"></a>
+                <ul>
+                    <li><a id="homebutton" href="#home">Home</a></li>
+                    <li><a href="#aboutme">About Me</a></li>
+                    <li><a href="#education">Education</a></li>
+                    <li><a href="#organization">Organizations</a></li>
+                    <li><a href="#research">Research</a></li>
+                    <li><a href="#work">Work</a></li>
+                    <li><a href="#contactme">Contact Me</a></li>
+                </ul>
+            </nav>
+            <div class = "front-content">
+                <div class = "left-design">
+                </div>
+                <div class = "img-container"></div>
+                <div class = "text-container-greeting">
+                  
+            </div>
+        </div>
+
+        </section>
+
+
+
+        <section id="r_about" class="r_about">
+            <a name="aboutme"></a>
+            <div class = "content">
+                <div class = "left-design-about">
+                </div>
+                <div class = "img-container"></div>
+                <div id="about-text" class = "text-container">
+                    <div class = "text-heading">
+                        About Me
+                    </div>
+                    <div class = "edit-button">Edit</div>
+                    <div class = "linedivider"></div>
+                
+                
+                
+
+                
+                        
+                   
+            </div>
+        </div>
+
+        </section>
+
+      
+        <section id="r_education" class="r_education">
+            <a name="education"></a>
+            <div class = "content">
+                <div class = "left-design-educ">
+                </div>
+                <div class = "img-container"></div>
+                <div id="educ-text" class = "text-container">
+                    <div class = "text-heading">
+                        Education
+                    </div>
+                    <div class = "add-button">add</div>
+                    <div class = "linedivider"></div>
+               
+                    
+                    
+                   
+            </div>
+        </div>
+
+        </section>
+
+        
+        <section id="r_organization" class="r_organization">
+            <a name="organization"></a>
+            <div class = "content">
+                <div class = "left-design-org">
+                </div>
+                <div class = "img-container"></div>
+                <div id="org-text" class = "text-container">
+                    <div class = "text-heading">
+                       Organizations
+                    </div>
+                    <div class = "add-button">add</div>
+                    
+                    <div class = "linedivider"></div>
+<!--                     
+                    <article class="text-content">
+                    <div class = "org-name">PTS</div>
+                    <div class = "org-pos">AVP for Activities | </div>
+                    <div class = "org-year">2019-Present</div>  
+                </article> -->
+            </div>
+        </div>
+
+        </section>
+
+        
+        <section id="r_research" class="r_research">
+            <a name="research"></a>
+            <div class = "content">
+                <div class = "left-design-research">
+                </div>
+                <div class = "img-container"></div>
+                <div id="research-text" class = "text-container">
+                    <div class = "text-heading">
+                       Research
+                    </div>
+                    <div class = "add-button">add</div>
+                    <div class = "linedivider"></div>
+<!--                     
+                    <article class="text-content">
+                    <div class = "org-name">PTS</div>
+                    <div class = "org-pos">AVP for Activities | </div>
+                    <div class = "org-year">2019-Present</div>  
+                </article> -->
+            </div>
+        </div>
+
+        </section>
+
+        <section id="r_work" class="r_work">
+            <a name="work"></a>
+            <div class = "content">
+                <div class = "left-design-work">
+                </div>
+                <div class = "img-container"></div>
+                <div id="work-text" class = "text-container">
+                    <div class = "text-heading">
+                       Work
+                    </div>
+                    <div class = "add-button">add</div>
+                    <div class = "linedivider"></div>
+<!--                     
+                    <article class="text-content">
+                    <div class = "org-name">PTS</div>
+                    <div class = "org-pos">AVP for Activities | </div>
+                    <div class = "org-year">2019-Present</div>  
+                </article> -->
+            </div>
+        </div>
+
+        </section>
+
+        <section id="r_contact" class="r_contact">
+            <a name="contactme"></a>
+            <div class = "content">
+                <div class = "left-design-contact">
+                </div>
+                <div class = "img-container"></div>
+                <div id="contact-text" class = "text-container">
+                    <div class = "text-heading">
+                       Contact Me
+                    </div>
+                    <div class = "edit-button">edit</div>
+                    <div class = "linedivider"></div>
+<!--                     
+                    <article class="text-content">
+                    <div class = "org-name">PTS</div>
+                    <div class = "org-pos">AVP for Activities | </div>
+                    <div class = "org-year">2019-Present</div>  
+                </article> -->
+            </div>
+        </div>
+
+        </section>
+ 
+    </div>
+    <div class = "login-container">
+        <form id="login">
+           <p> Login </p>
+           
+            <input type="email" id="email" placeholder="email"> 
+            <input type="password" id="password" placeholder="password"> 
+            <input type="submit" value="login" > 
+            
+        </form>
+    </div>
+
+    <div class="add-form" id="researchform">
+        <form id="addresearch">
+        <p>Research</p>
+            <input type="text" id="res-title" placeholder="title" required> 
+            <input type="text" id="res-authors" placeholder="authors (format ex: MJ Pangilinan) "  required>  
+            <input type="number" id="res-year" min="2000" placeholder="year"  required>
+            <input type="submit" value="Add Research" > 
+            <div id="cancel-button">Cancel</div>
+            
+            
+        </form>
+    </div>
+
+    <div class="add-form" id="workform">
+        <form id="addwork">
+              <p> Work</p>  
+            <input type="text" id="work-name" placeholder="name"  required> 
+            <input type="text" id="work-desc" placeholder="description"  required>  
+            <input type="number" id="work-year" min="2000" placeholder="year"  required>
+            <input type="submit" value="Add Work" > 
+            <div id="cancel-button">Cancel</div>
+        </form>
+    </div>
+        <div class="add-form" id="orgform">
+            <form id="addorg">
+                <p> Organization</p>  
+                <input type="text" id="org-name" placeholder="name"  required> 
+                <input type="text" id="org-pos" placeholder="positionHeld"  required>  
+                <input type="number" id="org-yearStart" min="2000" placeholder="year started" required>
+                <input type="number" id="org-yearEnd" min="2000" placeholder="year ended (leave blank if not applicable)">
+                <input type="submit" value="Add Organization" > 
+                <div id="cancel-button">Cancel</div>
+            </form>
+    </div>
+       
+
+    <div class="add-form" id="educform">
+        <form id="addeduc">
+            <p> Education</p>  
+            <input type="text" id="educ-level" placeholder="education level (ex: Senior High School)"  required> 
+            <input type="text" id="educ-degree" placeholder="degree"  required>  
+            <input type="text" id="educ-school" placeholder="school" required>  
+            <input type="number" id="educ-yearStart" min="2000" placeholder="year started"  required>
+            <input type="number" id="educ-yearEnd" min="2000" placeholder="year graduated (or expected year of graduation)" required>
+            <input type="submit" value="Add Education" > 
+            <div id="cancel-button">Cancel</div>
+        </form>
+    </div>
+
+    <div class="edit-form" id="edit-greeting">
+        <form id="editgreet">
+            <p>Front Page Greeting</p>
+            <span>Text Top</span>
+            <input type="text" id="text-top">
+            <span>Text Bottom</span>
+            <input type="text" id="text-bottom">
+            <input type="submit" value="Save Changes">
+            <div id="cancel-button">Cancel</div>
+        </form>
+    </div>
+
+    <div class="edit-form" id="edit-about">
+        <form id="editabout">
+            <p>About Me</p>
+            <span>Description</span>
+            <textarea id="about-desc"></textarea>
+        
+            <input type="submit" value="Save Changes">
+            <div id="cancel-button">Cancel</div>
+        </form>
+    </div>
+
+    <div class="edit-form" id="edit-links">
+        <form id="editlinks">
+            <p>Links</p>
+            <span>Twitter URL</span>
+            <input type="text" id="twitter-link">
+            <span>Twitter Handle</span>
+            <input type="text" id="twitter-handle">
+            <span>Github URL</span>
+            <input type="text" id="github-link">
+            <span>Github profile</span>
+            <input type="text" id="github-profile">
+            <span>LinkedIn URL</span>
+            <input type="text" id="linkedin-link">
+            <span>LinkedIn Name</span>
+            <input type="text" id="linkedin-name">
+            <input type="submit" value="Save Changes">
+            <div id="cancel-button">Cancel</div>
+        </form>
+    </div>
+
+    </body>
+</html>

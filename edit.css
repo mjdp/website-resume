@@ -1,0 +1,512 @@
+html, body, div#main-content {
+    min-width: 750px;
+    height:100%;
+    margin:0px;
+    padding:0px;
+    font-family: Roboto;
+    
+    }
+    
+    
+    
+    
+    .r_intro, .r_education, .r_organization, .r_research, .r_work, .r_about, .r_contact {
+        width: 100%;
+        height: 100%;
+        display:grid;
+        grid-template-rows:80px 1fr;
+        grid-template-columns: 1fr;
+        padding-bottom: 24px;
+    }
+    
+    .r_intro > nav 
+    {
+        grid-row: 1/2;
+        display:grid;
+        grid-template-columns: 40px auto;
+        justify-items: flex-end;
+        z-index:10;
+    
+        background-color: #5c695f;
+        position: fixed;
+    
+        padding:20px;
+        width:100%;
+        box-shadow: 0 2px 1px 1px #4e5850f1
+    
+    
+    }
+    
+    nav ul{
+        grid-column: 2/3;
+        display:flex;
+        flex-direction: row;
+        justify-content: flex-end;   
+        margin:0px;
+        padding-right: 40px;
+    }
+    
+    
+    nav > a#logolink {
+      grid-column: 1/2;
+      border-radius: 100%;
+      width:40px;
+      height: 40px;
+      background-image: url(logo.png);
+      background-size: contain;
+    }
+    
+    nav ul li{
+        display:inline-block;
+        margin: 12px;
+    }
+    
+    nav ul li a{
+        color: white;
+        text-decoration: none;
+        font-family: Roboto;
+        font-variant: normal;
+        font-size:16px;
+    }
+    
+    nav ul li:hover {
+        background-color:rgba(0, 0, 0, 0.123);
+    
+    
+    }
+    
+    .front-content, .content{
+        grid-row: 2/3;
+        display:grid;
+        grid-template-columns: 300px 200px 200px 10px 2fr;
+        grid-template-rows: 60px 60px 400px auto;
+        width: 100%;
+        height:100%;
+        margin-top:0px;
+        box-sizing: border-box;
+    }
+    
+    .left-design, .left-design-educ, .left-design-org, .left-design-research, .left-design-work, .left-design-about, .left-design-contact{
+        grid-column: 1/3;
+        grid-row:1/5;
+        height: 100%;
+        background-color: saddlebrown;
+        padding-bottom: 32px;
+        padding-top: 80px;
+    }
+    .r_education>a, .r_organization>a, .r_research>a, .r_work>a .r_about>a, .r_contact>a{
+      height:0px;
+    }
+    .left-design-educ {
+      background-color: burlywood;
+    
+    }
+    
+    .left-design-org{
+      background-color:#9bbabd;
+    
+      
+    }
+    .left-design-work {
+      background-color: darksalmon;
+    }
+    
+    
+    .left-design-research{
+      background-color: darkseagreen;
+    }
+    
+    .left-design-about{
+      background-color:#628db2;
+    }
+    
+    .left-design-contact{
+      background-color: wheat;
+    }
+    
+    .img-container {
+        grid-column: 2/4;
+        grid-row: 3/4;
+        background-color:white;
+        border-radius: 100%;
+        box-shadow: 8px 0px 5px rgba(85, 85, 85, 0.5);
+     
+    
+    }
+
+ 
+    
+    #r_about .img-container{
+      background-image: url(selfimg.png);
+        background-position: -25px 7px;
+        background-size: 500px;
+    } 
+    
+    #r_education .img-container{
+      background-image: url(sprite.png);
+      background-position: -20px 30px;
+      background-size:1400px;
+    }
+    
+    #r_organization .img-container{
+      background-image: url(sprite.png);
+      background-position: -363px 30px;
+      background-size:1400px;
+    }
+    
+    #r_research .img-container{
+      background-image: url(sprite.png);
+      background-position: -730px 35px;
+      background-size:1400px;
+    }
+    
+    #r_work .img-container{
+      background-image: url(sprite.png);
+      background-position: -1050px 40px;
+      background-size:1400px;
+    }
+    
+    #r_intro .img-container, #r_contact .img-container {
+      background-image: url(logo.png);
+     
+      background-position: 10px 20px;
+    }
+    
+    .text-container-greeting
+    {
+      grid-column: 5/6;
+        grid-row: 3/5;
+        margin-top: 150px;
+        justify-items: center;
+        align-items: center;
+    }
+
+     .text-container{
+        grid-column: 5/6;
+        grid-row: 2/5;
+        justify-items: center;
+        align-items: center;
+      
+    }
+
+    #r_about .text-container, #r_contact .text-container{
+      grid-column: 5/6;
+        grid-row: 3/5;
+        justify-items: center;
+        align-items: center;
+    }
+    
+    
+    .text-container, .text-container-greeting{
+      margin-left: 60px;
+      margin-right: 40px;
+      padding-bottom: 0px;
+      box-sizing: border-box;
+    }
+    
+    .text-heading {
+      
+        font-size: 64px;
+        font-weight: 700;
+        text-align: left;
+        display:inline;
+      
+    }
+    
+    
+    div.educ-level, div.org-name {
+      font-size: 28px;
+      font-weight:550;
+      padding-top:20px; 
+    }
+    
+    
+    div.res-title{
+      font-size:28px;
+      font-weight:550;
+      padding-top:20px; 
+    }
+    div.educ-school{
+      font-size: 20px;
+      
+    }
+    div.linedivider {
+      height: 5px;
+      width: 400px;
+      background-color: black;
+      padding-bottom: 0px;
+      margin-bottom: 0px;
+    }
+    div.educ-degree, div.educ-year{
+      font-size: 14px;
+      display: inline;
+      padding-top: 0px;
+    }
+    
+    div.org-pos, div.res-author{
+      font-size:18px;
+      display:inline;
+      padding-top: 0px;
+    }
+    div.org-year, div.res-year {
+      font-size: 16px;
+      display: inline;
+    }
+    
+    div.work-title {
+      font-size:28px;
+      font-weight:550;
+     
+      display:inline;
+    }
+    div.work-year {
+      font-size: 16px;
+      display: inline;
+    }
+    div.work-desc{
+      font-size:18px;
+      padding-top: 0px;
+    }
+    
+    #work-text>.linedivider {
+      margin-bottom: 20px;
+    }
+    
+    div.about-desc{
+      font-size: 18px;
+      text-align: justify;
+      padding-top:10px;
+      margin-right: 20px;
+      line-height: 1.3em;
+    
+    }
+    
+    a.c-twitter, a.c-linkedin, a.c-github {
+      font-size: 24px;
+      padding-top:10px;
+      display:block;
+      box-sizing: content-box;
+      text-decoration: none;
+      color:black;
+      transition: opacity .4s ease-in-out;
+     
+    }
+    
+    #contact-text>a:not(:hover) {
+        opacity: 0.6;
+    }
+    
+    
+    #contact-text>a:hover{
+    
+      opacity:1.0;
+    }
+    
+    .text-top, .text-bottom{
+      font-size: 56px;
+      font-family: Roboto;
+    }
+    
+    .text-container-greeting > .linedivider {
+      width:700px;
+    }
+
+    #org-text > .linedivider {
+      width:500px;
+    }
+    
+    
+/* edits */
+
+#r_work div.delete-container{
+    margin-bottom: 10px;
+}
+
+div.delete-container{
+    margin-top: 5px;
+}
+
+div.delete{
+    padding:4px;
+    display: inline;
+    font-family: Roboto;
+    background-color: rgba(158, 158, 158, 0.781);
+    cursor:pointer;
+ 
+}
+div.edit-button
+{
+    padding:4px;
+    display: inline;
+    font-family: Roboto;
+    background-color: rgb(158, 158, 158);
+    font-size:18px;
+    cursor:pointer;
+}
+
+div.add-button
+{
+    padding:4px;
+    display: inline;
+    font-family: Roboto;
+    background-color: rgb(158, 158, 158);
+    font-size:18px;
+
+    cursor:pointer;
+}
+
+div.login-container {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  position:absolute;
+  top:0;
+  left:0;
+  background-color:#5c695f;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  text-align: center;
+    
+  
+}
+
+div.add-form, div.edit-form{
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  height: fit-content;
+  width: 345px;
+  padding-left: 20px;
+  background-color: #5c695f;
+  padding-bottom: 20px;
+ 
+}
+
+div#edit-links{
+  top:20%;
+}
+
+div.login-container form, div.add-form form, div.edit-form form{
+  width:300px;
+  color:white; 
+  
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  
+}
+
+
+
+div.edit-form form
+{
+  width:400px;
+}
+
+div.edit-form{
+  width:450px;
+}
+
+div#edit-about{
+  width:500px;
+  height:520px;
+}
+div#edit-about{
+  top:10%;
+}
+
+
+
+div.login-container form p, div.add-form form p, div.edit-form p
+{
+  font-style: Roboto;
+  font-size:24px;
+  color:white;
+  text-align: center;
+  justify-content:  center;
+  font-weight: 700;
+  display: inline;
+}
+
+div.edit-form span{
+  font-style: Roboto;
+  font-size:16px;
+  color:white;
+  text-align: center;
+  justify-content:  center;
+}
+
+
+div.login-container form input, .add-form input, div.edit-form input, div.edit-form textarea{
+  padding:12px;
+  margin-bottom:10px;
+  
+  width:100%;
+  display:block;
+ 
+}
+
+div.login-container form input[type="submit"], .add-form input[type="submit"]{
+ width:325px;
+
+ 
+}
+.add-form input[type="submit"]{
+  background-color: rgb(126, 199, 126);
+  color:white;
+  border-color: rgb(126, 199, 126);
+  font-family: Roboto;
+  font-weight:600;
+  cursor: pointer;
+  
+}
+
+div.edit-form input[type="submit"]{
+  width:427px;
+  background-color: rgb(126, 199, 126);
+  color:white;
+  border-color: rgb(126, 199, 126);
+  font-family: Roboto;
+  font-weight:600;
+  cursor: pointer;
+}
+
+form#editabout textarea#about-desc{
+  width:450px;
+  height: 300px;
+  text-align: justify;
+  overflow-wrap: normal;
+}
+
+div#cancel-button{
+  width: 300px;
+  padding:12px;
+  background-color:rgb(255, 93, 93);
+  text-align: center;
+  justify-content: center;
+  font-family: Roboto;
+  font-weight:600;
+  cursor: pointer;
+}
+
+div.edit-form div#cancel-button{
+  width:402px;
+}
+
+
+div#edit-about input[type="submit"]{
+  width:477px;
+  background-color: rgb(126, 199, 126);
+  color:white;
+  border-color: rgb(126, 199, 126);
+  font-family: Roboto;
+  font-weight:600;
+  cursor: pointer;
+}
+
+
+div#edit-about div#cancel-button{
+  width:452px;
+}
