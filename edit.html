@@ -20,7 +20,7 @@
                         <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-firestore.js"></script>
 
                     <script>
-                    // Your web app's Firebase configuration
+                  
                     $(document).ready(function() {
                         
                  
@@ -54,8 +54,13 @@
                                 console.log(result);
                             
                                 $("#main-content").show();
-                               
-                                displayContent();
+                                displayIntro();
+                                displayAbout();
+                                displayEducation();
+                                displayOrg();
+                                displayWork();
+                                displayResearch();
+                                displayLinks();
                                 $("div.login-container").hide();
                              
                             }).catch(function(error) {
@@ -84,7 +89,13 @@
                 
                 
                 var educationLevel = $("input#educ-level").val()
+                if($("input#educ-degree").val()=="")
+                {
+                    var degree=null;
+                }
+                else {
                 var degree = $("input#educ-degree").val()
+                }
                 var school = $("input#educ-school").val()
                 var yearStarted = parseInt($("input#educ-yearStart").val())
                 var yearEnded = parseInt($("input#educ-yearEnd").val())
@@ -108,7 +119,7 @@
                     $("#educform").hide();
                     
                     clearFormEduc();
-                    displayContent();
+                    displayEducation();
                     
                 }).catch(function(error) {
                     console.error('Error writing new message to database', error);
@@ -172,7 +183,7 @@
                     
                     clearFormOrg();
                     
-                    displayContent();
+                    displayOrg();
                     
                 }).catch(function(error) {
                     console.error('Error writing new message to database', error);
@@ -230,7 +241,7 @@
                     
                     clearFormWork();
                     
-                    displayContent();
+                    displayWork();
                     
                 }).catch(function(error) {
                     console.error('Error writing new message to database', error);
@@ -286,7 +297,7 @@
                     
                     clearFormResearch();
                     
-                    displayContent();
+                    displayResearch();
                     
                 }).catch(function(error) {
                     console.error('Error writing new message to database', error);
@@ -351,7 +362,7 @@
                     
                     clearFormGreet();
                     
-                    displayContent();
+                    displayIntro();
                     
                 }).catch(function(error) {
                     console.error('Error editing message to database', error);
@@ -374,7 +385,7 @@
                      if (doc.exists) {
 
                         $("form textarea#about-desc").val(doc.data().value);
-                        $
+                        
 
                      }
                 })
@@ -412,7 +423,7 @@
                     
                     clearFormAbout();
                     
-                    displayContent();
+                    displayAbout();
                     
                 }).catch(function(error) {
                     console.error('Error editing message to database', error);
@@ -488,7 +499,7 @@
                     
                     clearFormLinks();
                     
-                    displayContent();
+                    displayLinks();
                     
                 }).catch(function(error) {
                     console.error('Error editing message to database', error);
@@ -531,7 +542,7 @@
                     function deleteEducation(uid){
                         firebase.firestore().collection("education").doc(uid).delete().then(function(){
                             
-                        displayContent();
+                        displayEducation();
                         }).catch(function(error) {
                             console.error("Error removing document: ", error);
                         });
@@ -551,7 +562,7 @@
                     function deleteWork(uid){
                         firebase.firestore().collection("work").doc(uid).delete().then(function(){
                             
-                        displayContent();
+                        displayWork();
                         }).catch(function(error) {
                             console.error("Error removing document: ", error);
                         });
@@ -570,7 +581,7 @@
                     function deleteOrg(uid){
                         firebase.firestore().collection("organizations").doc(uid).delete().then(function(){
                             
-                        displayContent();
+                        displayOrg();
                         }).catch(function(error) {
                             console.error("Error removing document: ", error);
                         });
@@ -588,7 +599,7 @@
                     function deleteResearch(uid){
                         firebase.firestore().collection("research").doc(uid).delete().then(function(){
                             
-                        displayContent();
+                        displayResearch();
                         }).catch(function(error) {
                             console.error("Error removing document: ", error);
                         });
@@ -597,24 +608,18 @@
                         
 
 
-
-
-
-                function displayContent(){
-                     var db = firebase.firestore()
-                     $("div#educ-text>article").css("display", "none");
-                     $("div#org-text>article").css("display", "none");
-                     $("div#work-text>article").css("display", "none");
-                     $("div#research-text>article").css("display", "none");
-                     $("div#about-text>article").css("display", "none");
-                     $("div.text-container-greeting>div").css("display", "none");
-                     $("div#contact-text>a").css("display", "none");
+                var db = firebase.firestore()
+               
+                     
+                     
+                    
+                     function displayEducation(){
                         //  EDUCATION START
+                        $("div#educ-text>article").remove()
                                 db.collection('education').orderBy("yearStarted","desc").onSnapshot(function(snapshot) {
-                                    
+
                                         snapshot.docChanges().forEach(function(change) {
                                     if (change.type === 'removed') {
-                                        //                    deleteMessage(change.doc.id);
                                         console.log(change.doc.id)
                                     } else {
                                             var data = change.doc.data();
@@ -654,18 +659,21 @@
                                             $(textContainer).append(deletecontainer);
 
                                             $("div#educ-text").append(textContainer);
-                                    
+                                            
                                             }
                                         });
                                     });
-
+                     }
                         // EDUCATION END
 
                         // ORG START
+                        function displayOrg(){
+                            $("div#org-text>article").remove()
                                 db.collection('organizations').orderBy("yearStarted","desc").onSnapshot(function(snapshot) {
+                                
                                         snapshot.docChanges().forEach(function(change) {
                                     if (change.type === 'removed') {
-                                        //                    deleteMessage(change.doc.id);
+                                    
                                         console.log(change.doc.id)
                                     } else {
                                             var data = change.doc.data();
@@ -706,14 +714,18 @@
                                             }
                                         });
                                     });
-
+                        }
                         // ORG END
 
                         // RESEARCH START
+                        function displayResearch(){
+                            $("div#research-text>article").remove()
                         db.collection('research').orderBy("year","desc").onSnapshot(function(snapshot) {
+                            
+                     
                                         snapshot.docChanges().forEach(function(change) {
                                     if (change.type === 'removed') {
-                                        //                    deleteMessage(change.doc.id);
+                                        
                                         console.log(change.doc.id)
                                     } else {
                                             var data = change.doc.data();
@@ -752,13 +764,16 @@
                                     });
 
                         // RESEARCH END
+                        }
 
                         // WORK START
-                            
+                        function displayWork(){
+                            $("div#work-text>article").remove()
+                     
                         db.collection('work').orderBy("year" ,"desc").onSnapshot(function(snapshot) {
                                         snapshot.docChanges().forEach(function(change) {
                                     if (change.type === 'removed') {
-                                        //                    deleteMessage(change.doc.id);
+                                        
                                         console.log(change.doc.id)
                                     } else {
                                             var data = change.doc.data();
@@ -798,9 +813,15 @@
 
                                     // WORK END
 
-                                    
+                        }
 
+
+
+                        function displayAbout(){
+                          
+                    
                                     db.collection("others").doc("aboutme").get().then(function(doc) {
+                                        $("div#about-text>article").remove();
                                         if (doc.exists) {
                                             var textContainer = document.createElement("article");
                                             var aboutdesc = document.createElement("div");
@@ -811,17 +832,20 @@
                                             $("div#about-text").append(textContainer);
                                             
                                         } else {
-                                            // doc.data() will be undefined in this case
+                                       
                                             console.log("No such document!");
                                         }
                                     }).catch(function(error) {
                                         console.log("Error getting document:", error);
                                     });
-
+                        }
 
                                     // aboutme end
-                                    
+                            function displayIntro(){
+                              
+                    
                                     db.collection("others").doc("intro").get().then(function(doc) {
+                                        $("div.text-container-greeting>div").remove();
                                         if (doc.exists) {
                                             
                                             var texttop = document.createElement("div");
@@ -847,18 +871,20 @@
                                     
                                             
                                         } else {
-                                            // doc.data() will be undefined in this case
+                                           
                                             console.log("No such document!");
                                         }
                                     }).catch(function(error) {
                                         console.log("Error getting document:", error);
                                     });
-
-
+                            }
+                                    
 
                                     // intro end
+                                function displayLinks(){ 
                                     
                                     db.collection("others").doc("links").get().then(function(doc) {
+                                        $("div#contact-text>a").remove()
                                         if (doc.exists) {
                                             
                                             var twitter = document.createElement("a");
@@ -884,7 +910,7 @@
                                             
                                             
                                         } else {
-                                            // doc.data() will be undefined in this case
+                                           
                                             console.log("No such document!");
                                         }
                                     }).catch(function(error) {
@@ -1118,7 +1144,7 @@
         <form id="addeduc">
             <p> Education</p>  
             <input type="text" id="educ-level" placeholder="education level (ex: Senior High School)"  required> 
-            <input type="text" id="educ-degree" placeholder="degree"  required>  
+            <input type="text" id="educ-degree" placeholder="degree (leave blank if not applicable)">  
             <input type="text" id="educ-school" placeholder="school" required>  
             <input type="number" id="educ-yearStart" min="2000" placeholder="year started"  required>
             <input type="number" id="educ-yearEnd" min="2000" placeholder="year graduated (or expected year of graduation)" required>
